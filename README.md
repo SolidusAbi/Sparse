@@ -19,3 +19,4 @@
 1. [Sparse Distributed Representations](https://discuss.pytorch.org/t/k-winner-take-all-advanced-indexing/24348)
 1. [ISTA Implementation](https://github.com/lpjiang97/sparse-coding/blob/master/src/model/SparseNet.py)
 1. [Bayesian Bits](https://arxiv.org/pdf/2005.07093.pdf)
+1. [Sparse AutoEncoder](https://web.stanford.edu/class/cs294a/sparseAutoencoder.pdf)
