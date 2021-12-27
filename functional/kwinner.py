@@ -15,7 +15,6 @@ class k_winners(autograd.Function):
       https://github.com/jcjohnson/pytorch-examples
   '''
 
-
   @staticmethod
   def forward(ctx, x, dutyCycles, k, boostStrength):
     '''
@@ -23,15 +22,19 @@ class k_winners(autograd.Function):
         in x. These factors are used to increase the impact of each unit to improve
         their chances of being chosen. This encourages participation of more columns
         in the learning process.
-        The boosting function is a curve defined as: boostFactors = exp[ -
-        boostStrength * (dutyCycle - targetDensity)] Intuitively this means that
-        units that have been active (i.e. in the top-k) at the target activation
-        level have a boost factor of 1, meaning their activity is not boosted.
+        
+        The boosting function is a curve defined as: 
+          boostFactors = exp[ - boostStrength * (dutyCycle - targetDensity)] 
+        Intuitively this means that units that have been active (i.e. in the top-k)
+        at the target activation level have a boost factor of 1, meaning their activity 
+        is not boosted.
+        
         Columns whose duty cycle drops too much below that of their neighbors are
         boosted depending on how infrequently they have been active. Unit that has
         been active more than the target activation level have a boost factor below
         1, meaning their activity is suppressed and they are less likely to be in 
         the top-k.
+        
         Note that we do not transmit the boosted values. We only use boosting to
         determine the winning units.
         The target activation density for each unit is k / number of units. The
