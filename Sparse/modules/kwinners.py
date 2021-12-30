@@ -3,7 +3,7 @@ import torch
 import math
 import abc
 
-from functional import k_winners, k_winners2d
+from Sparse.functional import k_winners, k_winners2d
 from .utils import binaryEntropy, maxEntropy
 
 class KWinnersBase(nn.Module):
