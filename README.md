@@ -27,6 +27,7 @@
 # TODO
 - [ ] Blind Spot Convolution
      - Just observe the noisy context of a pixel
+     - 'Efficient Blind-Spot Neural Network Architecture for Image Denoising' [\[Ref\]](https://arxiv.org/pdf/2008.11010.pdf)
 - [ ] Learning Hybrid Sparsity Prior for Image Restoration
      - [Paper](https://arxiv.org/pdf/1807.06920.pdf)
 - [ ] Sparse Linear
