@@ -3,7 +3,7 @@ from torch import nn
 from Sparse.functional import sparse_relu, sparse_relu_2d
 
 class ReLUWithSparsity(nn.Module):
-    def __init__(self, beta, rho=0.05):
+    def __init__(self, beta=1e-6, rho=0.05):
         '''
             Params
             ------

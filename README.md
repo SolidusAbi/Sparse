@@ -29,3 +29,6 @@
      - Just observe the noisy context of a pixel
 - [ ] Learning Hybrid Sparsity Prior for Image Restoration
      - [Paper](https://arxiv.org/pdf/1807.06920.pdf)
+- [ ] Sparse Linear
+    - Instead of activation functions
+    - Reference: [Extending PyTorch](https://pytorch.org/docs/stable/notes/extending.html#extending-torch-autograd)
