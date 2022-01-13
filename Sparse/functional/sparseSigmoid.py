@@ -43,7 +43,8 @@ class sparse_sigmoid(autograd.Function):
             with respect to the input.
         '''
         output, rho, beta, = ctx.saved_tensors
-        grad_input = (grad_output * (output*(1-output))) + (beta*kl_divergence(rho, output, apply_sigmoid=False))
+        grad_input = grad_output.clone()
+        grad_input = (grad_input * (output*(1-output))) + (beta*kl_divergence(rho, output, apply_sigmoid=False))
 
         return grad_input, None, None
 
@@ -88,7 +89,8 @@ class sparse_sigmoid_2d(autograd.Function):
         output, rho, beta, = ctx.saved_tensors
         B,_,H,W = output.shape
 
-        grad_input = grad_output * (output*(1-output))
+        grad_input = grad_output.clone()
+        grad_input *= output*(1-output)
         kl_loss = kl_divergence(rho, input)[None,:,None,None].expand(B,-1,H,W)
         grad_input += beta*kl_loss
 
