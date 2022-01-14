@@ -3,6 +3,10 @@ from torch import nn
 from Sparse.functional import sparse_relu, sparse_relu_2d, sparse_sigmoid, sparse_sigmoid_2d
 
 class SparseActivation(nn.Module):
+    '''
+        Base class in order to generate activation functions with sparsity based on 
+        KL-Divergence.
+    '''
     def __init__(self, beta, rho):
         super(SparseActivation, self).__init__()
         self.register_buffer("beta", torch.tensor(beta))
