@@ -30,7 +30,7 @@ class ReLUWithSparsity(SparseActivation):
     def forward(self, x):
         return sparse_relu.apply(x, self.rho, self.beta)
 
-class ReLUWithSparsity2d(nn.Module):
+class ReLUWithSparsity2d(SparseActivation):
     def __init__(self, beta=1e-6, rho=0.05):
         '''
             Params
