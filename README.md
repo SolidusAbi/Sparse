@@ -33,3 +33,4 @@
 - [ ] Sparse Linear
     - Instead of activation functions
     - Reference: [Extending PyTorch](https://pytorch.org/docs/stable/notes/extending.html#extending-torch-autograd)
+- [ ] Important! Include a configuration where you can set the sparse property with a 'constant prunning' or 'gradual prunning'.
