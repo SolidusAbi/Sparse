@@ -23,6 +23,7 @@
 1. Sparse AutoEncoder examples
     * [Using L1](https://debuggercafe.com/sparse-autoencoders-using-l1-regularization-with-pytorch/)
     * [Using KL Divergence](https://debuggercafe.com/sparse-autoencoders-using-kl-divergence-with-pytorch/)
+1. [Understanding Pytorch hooks](https://www.kaggle.com/sironghuang/understanding-pytorch-hooks)
 
 # TODO
 - [ ] Blind Spot Convolution
