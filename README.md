@@ -43,4 +43,5 @@ $\dfrac{\partial KL(\rho||\hat{\rho})_{Ber}}{\partial\hat{\rho}} = \dfrac{1-\rho
     - Instead of activation functions
     - Reference: [Extending PyTorch](https://pytorch.org/docs/stable/notes/extending.html#extending-torch-autograd)
 - [ ] Important! Include a configuration where you can set the sparse property with a 'constant prunning' or 'gradual prunning'.
+- [ ] Notebook with plotting KL Div and gradient estimation
 
