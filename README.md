@@ -25,6 +25,14 @@
     * [Using KL Divergence](https://debuggercafe.com/sparse-autoencoders-using-kl-divergence-with-pytorch/)
 1. [Understanding Pytorch hooks](https://www.kaggle.com/sironghuang/understanding-pytorch-hooks)
 
+## ...
+$ KL(\rho||\hat{\rho})_{Ber} = \rho \log\left(\dfrac{\rho}{\hat{\rho}}\right) + (1-\rho)\log\left(\dfrac{1-\rho}{1-\hat{\rho}}\right)$
+
+### Gradient based on $\hat{\rho}$
+$\dfrac{\partial KL(\rho||\hat{\rho})_{Ber}}{\partial\hat{\rho}} = \dfrac{1-\rho}{1-\hat{\rho}}-\dfrac{\rho}{\hat{\rho}} = -\dfrac{\hat{\rho}-\rho}{\left(\hat{\rho}-1\right)\hat{\rho}}$
+
+
+
 # TODO
 - [ ] Blind Spot Convolution
      - Just observe the noisy context of a pixel
@@ -35,3 +43,4 @@
     - Instead of activation functions
     - Reference: [Extending PyTorch](https://pytorch.org/docs/stable/notes/extending.html#extending-torch-autograd)
 - [ ] Important! Include a configuration where you can set the sparse property with a 'constant prunning' or 'gradual prunning'.
+
