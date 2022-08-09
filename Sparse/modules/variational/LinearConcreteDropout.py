@@ -40,7 +40,7 @@ class LinearCD(nn.Linear, VariationalLayer):
 
     def concrete_bernoulli(self, x):
         eps = 1e-8
-        unif_noise = torch.cuda.FloatTensor(*x.size()).uniform_() if self.logit_p.is_cuda else torch.FloatTensor(*x.size()).uniform_
+        unif_noise = torch.cuda.FloatTensor(*x.size()).uniform_() if self.logit_p.is_cuda else torch.FloatTensor(*x.size()).uniform_()
 
         p = torch.sigmoid(self.logit_p)
         tmp = .1
