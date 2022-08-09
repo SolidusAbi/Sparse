@@ -26,7 +26,7 @@ class sparse_relu(autograd.Function):
                 rho: float
                     Sparsity parameter, typically a small value close to zero (i.e 0.05), which
                     constraint the activation of each neuron. To satisfy this constraint, the
-                    hidden unit’s activations must mostly be near 0.
+                    hidden unit's activations must mostly be near 0.
 
                 beta: float
                     Controls the weight of the sparsity penalty term.
@@ -43,8 +43,12 @@ class sparse_relu(autograd.Function):
         '''
         input, rho, beta, = ctx.saved_tensors
         grad_input = grad_output.clone()
+
+        kl_loss = kl_divergence(rho, input.flatten(start_dim=1), apply_sigmoid=True)
+
         grad_input[input < 0] = 0
-        grad_input[input > 0] = grad_input[input > 0] + (beta*kl_divergence(rho, input))
+        grad_input[input > 0] = grad_input[input > 0] + (beta*kl_loss[input>0])
+        # grad_input[input > 0] = grad_input[input > 0] * (1 + (beta*kl_divergence(rho, input.flatten(start_dim=1), apply_sigmoid=True)))
         return grad_input, None, None
 
 class sparse_relu_2d(autograd.Function):
@@ -68,7 +72,7 @@ class sparse_relu_2d(autograd.Function):
                 rho: float
                     Sparsity parameter, typically a small value close to zero (i.e 0.05), which
                     constraint the activation of each neuron. To satisfy this constraint, the
-                    hidden unit’s activations must mostly be near 0.
+                    hidden unit's activations must mostly be near 0.
 
                 beta: float
                     Controls the weight of the sparsity penalty term.
@@ -87,8 +91,10 @@ class sparse_relu_2d(autograd.Function):
         B,_,H,W = input.shape
 
         grad_input = grad_output.clone()
-        kl_loss = kl_divergence(rho, input)[None,:,None,None].expand(B,-1,H,W)
+        kl_loss = kl_divergence(rho, input, apply_sigmoid=True)[None,:,None,None].expand(B,-1,H,W)
+        # kl_loss = torch.sign(grad_output)*kl_loss
 
         grad_input[input < 0] = 0
-        grad_input[input > 0] = grad_input[input > 0] + (beta*kl_loss)[input > 0]
+        # grad_input[input > 0] = grad_input[input > 0] + (beta*kl_loss)[input > 0]
+        grad_input[input > 0] = grad_input[input > 0] * (1 + (beta*kl_loss)[input > 0])
         return grad_input, None, None
