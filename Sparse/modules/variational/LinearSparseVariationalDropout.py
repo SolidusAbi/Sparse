@@ -6,20 +6,6 @@ import torch.nn.functional as F
 
 from .VariationalLayer import VariationalLayer
 
-def compute_log_alpha(log_sigma, theta):
-  r''' 
-      Compute the log \alpha values from \theta and log \sigma^2.
-
-      The relationship between \sigma^2, \theta, and \alpha as defined in the
-      paper https://arxiv.org/abs/1701.05369 is \sigma^2 = \alpha * \theta^2.
-
-      This method calculates the log \alpha values based on this relation:
-        \log(\alpha) = 2*\log(\sigma) - 2*\log(\theta)
-  ''' 
-  log_alpha = log_sigma * 2.0 - 2.0 * torch.log(1e-16 + torch.abs(theta))
-  log_alpha = torch.clamp(log_alpha, -10, 10) # clipping for a numerical stability
-  return log_alpha
-
 # Linear Sparse Variational Dropout
 # See https://arxiv.org/pdf/1701.05369.pdf for details
 class LinearSVD(nn.Linear, VariationalLayer):
@@ -50,6 +36,8 @@ class LinearSVD(nn.Linear, VariationalLayer):
         self.log_sigma.data.fill_(-5) # Initialization based on the paper, Figure 1
     
     def forward(self, x: torch.Tensor) -> torch.Tensor:
+        self.log_alpha = self.compute_log_alpha(self.log_sigma, torch.abs(self.weight))
+
         if self.training:
             # LRT = local reparametrization trick (For details, see https://arxiv.org/pdf/1506.02557.pdf)
             lrt_mean =  F.linear(x, self.weight, self.bias)
@@ -57,11 +45,23 @@ class LinearSVD(nn.Linear, VariationalLayer):
             eps = torch.normal(0, torch.ones_like(lrt_std))
             return lrt_mean + lrt_std * eps
         
-        self.log_alpha = compute_log_alpha(self.log_sigma, torch.abs(self.weight))
         return F.linear(x, self.weight * (self.log_alpha < self.log_alpha_threshold).float(), self.bias)
 
     def kl_reg(self):
         k1, k2, k3 = torch.Tensor([0.63576]).cuda(), torch.Tensor([1.8732]).cuda(), torch.Tensor([1.48695]).cuda()
-        k1, k2, k3 = torch.Tensor([0.63576]).cuda(), torch.Tensor([1.8732]).cuda(), torch.Tensor([1.48695]).cuda()
         kl = k1 * torch.sigmoid(k2 + k3 * self.log_alpha) - 0.5 * torch.log1p(torch.exp(-self.log_alpha))
         return -(torch.sum(kl))
+
+    def compute_log_alpha(self, log_sigma, theta):
+        r''' 
+            Compute the log \alpha values from \theta and log \sigma^2.
+
+            The relationship between \sigma^2, \theta, and \alpha as defined in the
+            paper https://arxiv.org/abs/1701.05369 is \sigma^2 = \alpha * \theta^2.
+
+            This method calculates the log \alpha values based on this relation:
+                \log(\alpha) = 2*\log(\sigma) - 2*\log(\theta)
+        ''' 
+        log_alpha = log_sigma * 2.0 - 2.0 * torch.log(1e-16 + torch.abs(theta))
+        log_alpha = torch.clamp(log_alpha, -10, 10) # clipping for a numerical stability
+        return log_alpha
